@@ -1,0 +1,2 @@
+/home/ece-pi-005/LIS3DHTR/LIS3DHTR.py:191: RuntimeWarning: This channel is already in use, continuing anyway.  Use GPIO.setwarnings(False) to disable warnings.
+  GPIO.setup(18,GPIO.OUT)
