@@ -11,7 +11,7 @@ import time
 import RPi.GPIO as GPIO
  
 # Get I2C bus
-buslist = [0,1,2,3,4,5,6,7]
+buslist = [11,12,13,14,15,16,17,18]
 bus = [smbus.SMBus(buslist[0]),smbus.SMBus(buslist[1]),smbus.SMBus(buslist[2]),smbus.SMBus(buslist[3]),smbus.SMBus(buslist[4]),smbus.SMBus(buslist[5]),smbus.SMBus(buslist[6]),smbus.SMBus(buslist[7])]
 
 # I2C address of the device
