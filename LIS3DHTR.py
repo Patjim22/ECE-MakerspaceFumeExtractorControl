@@ -158,34 +158,46 @@ GPIO.setup(18,GPIO.OUT)
 GPIO.output(18,GPIO.LOW)
 while True:
     for i in range(0,len(bus)):
-        accl = lis3dhtr[i].read_accl()
-        for j in range(numAddresses[i]):
-            if abs(accl_old['x'][i][j] - accl['x'][j]) > .15 or abs(accl_old['y'][i][j] - accl['y'][j]) > .15 or abs(accl_old['z'][i][j] - accl['z'][j]) > .15:
-                count[i][j] += 1
-                lowcount[i][j] = 0
-                if count[i][j] > 2:
-                    sensorOn[i][j] = 1
-                    count[i][j] = 0
-            else:
-                count[i][j] = 0
-                lowcount[i][j] += 1
-                if lowcount[i][j] > 4:
-                    sensorOn[i][j] = 0
+        try:
+            accl = lis3dhtr[i].read_accl()
+            for j in range(numAddresses[i]):
+                if abs(accl_old['x'][i][j] - accl['x'][j]) > .15 or abs(accl_old['y'][i][j] - accl['y'][j]) > .15 or abs(accl_old['z'][i][j] - accl['z'][j]) > .15:
+                    count[i][j] += 1
                     lowcount[i][j] = 0
-        accl_old[i] = accl
+                    if count[i][j] > 2:
+                        sensorOn[i][j] = 1
+                        count[i][j] = 0
+                else:
+                    count[i][j] = 0
+                    lowcount[i][j] += 1
+                    if lowcount[i][j] > 4:
+                        sensorOn[i][j] = 0
+                        lowcount[i][j] = 0
+                accl_old[i] = accl
+        except:
+            for j in range(2,120):
+                try:
+                    addressList[c] = bus[i].read_byte_data(j)
+                    c = c + 1
+                except:
+                    addressList[c] = 0
+            numAddresses[i] = c
+            c = 0
+            lis3dhtr[i] = LIS3DHTR(addressList,numAddresses)
     if any(sensorOn):
         print("TURN FAN ON!")
         for i in range(0,len(bus)):
             for j  in range(numAddresses[i]):
                 sensorOn[i][j] = 0
-        GPIO.output(18,GPIO.HIGH)
-        time.sleep(25)
-    else:
-        print("Fan Turned Off")
-        GPIO.output(18,GPIO.LOW)
-        for i in range(0,len(bus)):
-            for j  in range(numAddresses[i]):
-                lowcount[i][j] = 0
-    
+            GPIO.output(18,GPIO.HIGH)
+            time.sleep(25)
+        else:
+            print("Fan Turned Off")
+            GPIO.output(18,GPIO.LOW)
+            for i in range(0,len(bus)):
+                for j  in range(numAddresses[i]):
+                    lowcount[i][j] = 0
+        
+            
     time.sleep(2)
 
