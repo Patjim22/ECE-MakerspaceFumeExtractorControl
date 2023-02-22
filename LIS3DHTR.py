@@ -106,7 +106,7 @@ class LIS3DHTR():
         xAccl = 0
         yAccl = 0
         zAccl = 0
-        for i in range(self.numSensors):
+        for i in range(len(self.numSensors)):
             data0 = bus.read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_L)
             data1 = bus.read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_H)
  
@@ -144,6 +144,7 @@ for i in range(0,len(bus)):
         try:
             addressList.append(bus[i].read_byte_data(j))
             c = c + 1
+            print("Sensor Found",i,j)
         except:
             print(i,j)
     numAddresses.append(c)
