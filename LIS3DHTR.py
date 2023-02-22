@@ -134,6 +134,14 @@ class LIS3DHTR():
  
 from LIS3DHTR import LIS3DHTR
 c = 0
+addressList = []
+numAddresses =[]
+lis3dhtr = []
+accl_old = []
+count = []
+lowcount = []
+fanOn = []
+sensorOn = []
 for i in range(0,len(bus)):
     for j in range(2,120):
         try:
