@@ -81,8 +81,8 @@ class LIS3DHTR():
     def __init__ (self,addressList,numSensors):
         self.addressList = addressList
         self.numSensors = numSensors
-        self.select_datarate(self,self.addressList,self.numSensors)
-        self.select_data_config(self,self.addressList,self.numSensors)
+        self.select_datarate(self.addressList,self.numSensors)
+        self.select_data_config(self.addressList,self.numSensors)
  
     def select_datarate(self,addressList,numSensors):
         """Select the data rate of the accelerometer from the given provided values"""
