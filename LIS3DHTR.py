@@ -132,7 +132,7 @@ class LIS3DHTR():
             zAccl[i] /= 16000
         return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
  
-from LIS3DHTR import LIS3DHTR
+
 c = 0
 addressList = []
 numAddresses = []
