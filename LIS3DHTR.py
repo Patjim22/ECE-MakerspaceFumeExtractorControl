@@ -147,7 +147,7 @@ for i in range(0,len(bus)):
             c = c + 1
             print("Sensor Found",i,j)
         except:
-            print(i,j)
+            pass
     numAddresses.append(c)
     c = 0
     lis3dhtr.append(LIS3DHTR(addressList,numAddresses))
@@ -190,7 +190,7 @@ while True:
                     addressList.append(bus[i].read_byte_data(j))
                     c = c + 1
                 except:
-                    print(i,j)
+                    pass
             numAddresses[i] = c
             c = 0
             lis3dhtr[i] = LIS3DHTR(addressList,numAddresses)
