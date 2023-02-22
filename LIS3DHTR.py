@@ -74,7 +74,7 @@ LIS3DHTR_INT1_CFG		    = 0x30 # Interrupt 1 configuration register
 LIS3DHTR_INT1_THS                   = 0x32 # Interrupt 1 Threshold register
 LIS3DHTR_INT1_DURATION              = 0x33 # Interrupt 1 Duration register
 LIS3DHTR_INT1_MOTION_DETECT         = 0x0A # 6-Direction Movement Recognition
- 
+
  
  
 class LIS3DHTR():
@@ -135,31 +135,29 @@ class LIS3DHTR():
 from LIS3DHTR import LIS3DHTR
 c = 0
 addressList = []
-numAddresses =[]
+numAddresses = []
 lis3dhtr = []
-accl_old = []
-count = []
-lowcount = []
-fanOn = []
-sensorOn = []
 for i in range(0,len(bus)):
     for j in range(2,120):
         try:
-            addressList[c] = bus[i].read_byte_data(j)
+            addressList.append(bus[i].read_byte_data(j))
             c = c + 1
         except:
-            addressList[c] = 0
-    numAddresses[i] = c
+            print(i,j)
+    numAddresses.append(c)
     c = 0
-    lis3dhtr[i] = LIS3DHTR(addressList,numAddresses)
+    lis3dhtr.append(LIS3DHTR(addressList,numAddresses))
+    
 
 time.sleep(1)
+accl_old = []
+count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+lowcount = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+fanOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+sensorOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
 for i in range(0,len(bus)):
-    accl_old[i] = lis3dhtr[i].read_accl()
-    for j in range(numAddresses[i]):
-        count[i][j] = 0
-        lowcount[i][j] = 0
-        fanOn[i][j] = 0
+    accl_old.append(lis3dhtr[i].read_accl())
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(23,GPIO.IN)
 GPIO.setup(18,GPIO.OUT)
@@ -185,10 +183,10 @@ while True:
         except:
             for j in range(2,120):
                 try:
-                    addressList[c] = bus[i].read_byte_data(j)
+                    addressList.append(bus[i].read_byte_data(j))
                     c = c + 1
                 except:
-                    addressList[c] = 0
+                    print(i,j)
             numAddresses[i] = c
             c = 0
             lis3dhtr[i] = LIS3DHTR(addressList,numAddresses)
