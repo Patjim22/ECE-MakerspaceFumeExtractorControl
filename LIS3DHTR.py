@@ -173,7 +173,7 @@ while True:
     for i in range(0,len(bus)):
         try:
             accl = lis3dhtr[i].read_accl()
-            print(accl)
+            print(accl,i)
             for j in range(numAddresses[i]):
                 if abs(accl_old['x'][i][j] - accl['x'][j]) > .15 or abs(accl_old['y'][i][j] - accl['y'][j]) > .15 or abs(accl_old['z'][i][j] - accl['z'][j]) > .15:
                     count[i][j] += 1
