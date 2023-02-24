@@ -146,13 +146,13 @@ for i in range(0,len(bus)):
             bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
             addressList.append(j)
             c = c + 1
-            print("Sensor Found /n Bus:",i,"/n Address: ",hex(j))
+            print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
         except:
             pass
     numAddresses.append(c)
     c = 0
     lis3dhtr.append(LIS3DHTR(addressList,numAddresses))
-    
+    addressList.clear()
 
 time.sleep(1)
 accl_old = []
@@ -196,6 +196,7 @@ while True:
             numAddresses[i] = c
             c = 0
             lis3dhtr[i] = LIS3DHTR(addressList,numAddresses)
+            addressList.clear()
         if any(sensorOn):
             print("TURN FAN ON!")
             for i in range(0,len(bus)):
