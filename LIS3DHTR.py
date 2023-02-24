@@ -153,7 +153,7 @@ for i in range(0,len(bus)):
             pass
     numAddresses.append(c)
     c = 0
-    lis3dhtr.append(LIS3DHTR(i,addressList,numAddresses))
+    lis3dhtr.append(LIS3DHTR(i,addressList,numAddresses[i]))
     print(lis3dhtr)
     addressList.clear()
 
@@ -198,7 +198,7 @@ while True:
                     pass
             numAddresses[i] = c
             c = 0
-            lis3dhtr[i] = LIS3DHTR(i,addressList,numAddresses)
+            lis3dhtr[i] = LIS3DHTR(i,addressList,numAddresses[i])
             addressList.clear()
         if any(sensorOn):
             print("TURN FAN ON!")
