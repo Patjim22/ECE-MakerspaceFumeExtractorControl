@@ -90,7 +90,7 @@ class LIS3DHTR():
         DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_10 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
         for i in range(len(numSensors)):
             if addressList:
-                print(addressList)
+                print(addressList,busnum,i)
                 bus[busnum].write_byte_data(addressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
             
  
