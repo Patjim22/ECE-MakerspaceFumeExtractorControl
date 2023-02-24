@@ -90,7 +90,6 @@ class LIS3DHTR():
         DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_10 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
         for i in range(numSensors):
             if addressList:
-                print(addressList,busnum,i,numSensors)
                 bus[busnum].write_byte_data(addressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
             
  
@@ -154,7 +153,6 @@ for i in range(0,len(bus)):
     numAddresses.append(c)
     c = 0
     lis3dhtr.append(LIS3DHTR(i,addressList,numAddresses[i]))
-    print(lis3dhtr)
     addressList.clear()
 
 time.sleep(1)
@@ -201,6 +199,7 @@ while True:
             lis3dhtr[i] = LIS3DHTR(i,addressList,numAddresses[i])
             addressList.clear()
         if any(sensorOn):
+            print(sensorOn)
             print("TURN FAN ON!")
             for i in range(0,len(bus)):
                 for j  in range(numAddresses[i]):
