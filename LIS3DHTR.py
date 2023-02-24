@@ -107,6 +107,7 @@ class LIS3DHTR():
         xAccl = 0
         yAccl = 0
         zAccl = 0
+        print(self.busnum,self.numSensors,self.addressList)
         for i in range(self.numSensors):
             if self.addressList:
                 print("Data Read For: ",self.busnum, "Sensor: ",i)
