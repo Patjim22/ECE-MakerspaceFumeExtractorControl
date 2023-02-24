@@ -198,7 +198,7 @@ while True:
             c = 0
             lis3dhtr[i] = LIS3DHTR(i,addressList,numAddresses[i])
             addressList.clear()
-        if any(sensorOn):
+        if any(sensorOn) == 1:
             print(sensorOn)
             print("TURN FAN ON!")
             for i in range(0,len(bus)):
