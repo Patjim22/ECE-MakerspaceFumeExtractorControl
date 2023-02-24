@@ -197,7 +197,7 @@ while True:
                     pass
             numAddresses[i] = c
             c = 0
-            lis3dhtr[i] = LIS3DHTR(addressList,numAddresses)
+            lis3dhtr[i] = LIS3DHTR(i,addressList,numAddresses)
             addressList.clear()
         if any(sensorOn):
             print("TURN FAN ON!")
