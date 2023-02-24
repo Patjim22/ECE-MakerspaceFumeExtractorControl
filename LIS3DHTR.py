@@ -140,7 +140,8 @@ c = 0
 addressList = []
 numAddresses = []
 lis3dhtr = []
-print(bus[0].read_byte_data(25))
+print(bus[0].read_byte_data(25,LIS3DHTR_REG_OUT_X_L))
+print(bus[0].read_byte_data(26,LIS3DHTR_REG_OUT_X_L))
 for i in range(0,len(bus)):
     for j in range(2,120):
         try:
