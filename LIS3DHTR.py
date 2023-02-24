@@ -135,11 +135,12 @@ class LIS3DHTR():
                 zAccl[i] /= 16000
             return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
  
-
+from LIS3DHTR import LIS3DHTR
 c = 0
 addressList = []
 numAddresses = []
 lis3dhtr = []
+print(bus[0].read_byte_data(25))
 for i in range(0,len(bus)):
     for j in range(2,120):
         try:
