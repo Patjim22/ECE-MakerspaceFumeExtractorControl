@@ -189,7 +189,7 @@ while True:
                     if lowcount[i][j] > 4:
                         sensorOn[i][j] = 0
                         lowcount[i][j] = 0
-                print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j])
+                print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j],sensorOn[i][j])
                 accl_old[i] = accl
                 
                 
@@ -198,14 +198,16 @@ while True:
             for j in range(2,120):
                 try:
                     bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
-                    addressList.append(j)
+                    addressListtemp.append(j)
                     c = c + 1
+                    print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
                 except:
                     pass
-            numAddresses[i] = c
-            c = 0
-            lis3dhtr[i] = LIS3DHTR(i,addressList,numAddresses[i])
-            addressList.clear()
+                numAddresses.append(c)
+                c = 0
+                addressList.append(addressListtemp)
+                lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
+                addressListtemp = []
         if 1 in sensorOn:
             print(sensorOn)
             print("TURN FAN ON!")
