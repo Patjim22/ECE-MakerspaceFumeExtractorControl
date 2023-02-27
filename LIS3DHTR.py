@@ -104,9 +104,9 @@ class LIS3DHTR():
     def read_accl(self):
         """Read data back from LIS3DHTR_REG_OUT_X_L(0x28), 2 bytes
         X-Axis Accl LSB, X-Axis Accl MSB"""
-        xAccl = 0
-        yAccl = 0
-        zAccl = 0
+        xAccl = [0]*self.numSensors
+        yAccl = [0]*self.numSensors
+        zAccl = [0]*self.numSensors
         for i in range(self.numSensors):
             if self.objaddressList:
                 print("Data Read For: ",self.busnum, "Sensor: ",i)
@@ -156,13 +156,8 @@ for i in range(0,len(bus)):
     c = 0
     addressList.append(addressListtemp)
     lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
-    print(lis3dhtr[0].objaddressList)
-    print(addressList)
     addressListtemp = []
-    print(addressList)
-    
-for i in range(0,len(bus)):
-    print(lis3dhtr[i].objaddressList)
+
 time.sleep(1)
 accl_old = []
 count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
