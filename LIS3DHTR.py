@@ -195,6 +195,7 @@ while True:
                 accl_old[i] = accl
                 
         except:
+            print("Exception Happened")
             for j in range(2,120):
                 try:
                     bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
@@ -217,9 +218,6 @@ while True:
         else:
             print("Fan Turned Off")
             GPIO.output(18,GPIO.LOW)
-            for i in range(0,len(bus)):
-                for j  in range(numAddresses[i]):
-                    lowcount[i][j] = 0
         
             
     time.sleep(2)
