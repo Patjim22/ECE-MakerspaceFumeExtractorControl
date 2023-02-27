@@ -79,6 +79,7 @@ LIS3DHTR_INT1_MOTION_DETECT         = 0x0A # 6-Direction Movement Recognition
  
 class LIS3DHTR():
     def __init__ (self,busnum,addressList,numSensors):
+        print(addressList)
         self.addressList = addressList
         self.numSensors = numSensors
         self.busnum = busnum
@@ -153,6 +154,7 @@ for i in range(0,len(bus)):
             addressList.append(j)
             c = c + 1
             print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
+            print(addressList)
         except:
             pass
     numAddresses.append(c)
