@@ -157,8 +157,9 @@ for i in range(0,len(bus)):
     addressList.append(addressListtemp)
     lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
     print(lis3dhtr[0].objaddressList)
+    print(addressList)
     addressListtemp.clear()
-    print(lis3dhtr[0].objaddressList)
+    print(addressList)
     
 for i in range(0,len(bus)):
     print(lis3dhtr[i].objaddressList)
