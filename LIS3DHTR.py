@@ -157,7 +157,7 @@ for i in range(0,len(bus)):
     print(lis3dhtr[i].addressList)
     addressList.clear()
 
-
+print(lis3dhtr[0].addressList)
 time.sleep(1)
 accl_old = []
 count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
