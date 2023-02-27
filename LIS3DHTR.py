@@ -79,18 +79,15 @@ LIS3DHTR_INT1_MOTION_DETECT         = 0x0A # 6-Direction Movement Recognition
  
 class LIS3DHTR():
     def __init__ (self,busnum,addressList,numSensors):
-        print(addressList)
         self.addressList = addressList
         self.numSensors = numSensors
         self.busnum = busnum
-        print(self.addressList)
         self.select_datarate(self.busnum,self.addressList,self.numSensors)
         self.select_data_config(self.busnum,self.addressList,self.numSensors)
  
     def select_datarate(self,busnum,addressList,numSensors):
         """Select the data rate of the accelerometer from the given provided values"""
         DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_10 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
-        print(addressList)
         for i in range(numSensors):
             if addressList:
                 bus[busnum].write_byte_data(addressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
@@ -110,10 +107,8 @@ class LIS3DHTR():
         xAccl = 0
         yAccl = 0
         zAccl = 0
-        print(self.busnum,self.numSensors,self.addressList)
         for i in range(self.numSensors):
             if self.addressList:
-                print(hex(self.addressList))
                 print("Data Read For: ",self.busnum, "Sensor: ",i)
                 data0 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_L)
                 data1 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_H)
