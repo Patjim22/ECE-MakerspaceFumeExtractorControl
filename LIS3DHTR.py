@@ -82,6 +82,7 @@ class LIS3DHTR():
         self.addressList = addressList
         self.numSensors = numSensors
         self.busnum = busnum
+        print(self.addressList)
         self.select_datarate(self.busnum,self.addressList,self.numSensors)
         self.select_data_config(self.busnum,self.addressList,self.numSensors)
  
@@ -110,7 +111,7 @@ class LIS3DHTR():
         print(self.busnum,self.numSensors,self.addressList)
         for i in range(self.numSensors):
             if self.addressList:
-                print(self.addressList)
+                print(hex(self.addressList))
                 print("Data Read For: ",self.busnum, "Sensor: ",i)
                 data0 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_L)
                 data1 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_H)
