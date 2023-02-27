@@ -90,6 +90,7 @@ class LIS3DHTR():
     def select_datarate(self,busnum,addressList,numSensors):
         """Select the data rate of the accelerometer from the given provided values"""
         DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_10 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
+        print(addressList)
         for i in range(numSensors):
             if addressList:
                 bus[busnum].write_byte_data(addressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
