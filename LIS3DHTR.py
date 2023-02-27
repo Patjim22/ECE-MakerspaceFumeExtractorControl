@@ -183,14 +183,15 @@ while True:
                     if count[i][j] > 2:
                         sensorOn[i][j] = 1
                         count[i][j] = 0
-                    print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j])
                 else:
                     count[i][j] = 0
                     lowcount[i][j] += 1
                     if lowcount[i][j] > 4:
                         sensorOn[i][j] = 0
                         lowcount[i][j] = 0
+                print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j])
                 accl_old[i] = accl
+                
                 
         except:
             print("Exception Happened")
