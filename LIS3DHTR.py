@@ -177,13 +177,13 @@ while True:
             accl = lis3dhtr[i].read_accl()
             print(accl,i)
             for j in range(numAddresses[i]):
-                if abs(accl_old['x'][i][j] - accl['x'][j]) > .15 or abs(accl_old['y'][i][j] - accl['y'][j]) > .15 or abs(accl_old['z'][i][j] - accl['z'][j]) > .15:
+                if abs(accl_old[i]['x'][j] - accl['x'][j]) > .15 or abs(accl_old[i]['y'][j] - accl['y'][j]) > .15 or abs(accl_old[i]['z'][j] - accl['z'][j]) > .15:
                     count[i][j] += 1
                     lowcount[i][j] = 0
                     if count[i][j] > 2:
                         sensorOn[i][j] = 1
                         count[i][j] = 0
-                    print(i,"Sensor: ",j,"Accels X: ",abs(accl_old['x'][i][j] - accl['x'][j]), count[i][j])
+                    print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j])
                 else:
                     count[i][j] = 0
                     lowcount[i][j] += 1
