@@ -136,6 +136,7 @@ class LIS3DHTR():
                 if zAccl[i] > 32767 :
                     zAccl[i] -= 65536
                 zAccl[i] /= 16000
+            print(xAccl,yAccl,zAccl)
             return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
  
 from LIS3DHTR import LIS3DHTR
