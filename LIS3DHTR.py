@@ -82,23 +82,23 @@ class LIS3DHTR():
         self.addressList = addressList
         self.numSensors = numSensors
         self.busnum = busnum
-        self.select_datarate(self.busnum,self.addressList,self.numSensors)
-        self.select_data_config(self.busnum,self.addressList,self.numSensors)
+        self.select_datarate()
+        self.select_data_config()
  
-    def select_datarate(self,busnum,addressList,numSensors):
+    def select_datarate(self):
         """Select the data rate of the accelerometer from the given provided values"""
         DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_10 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
-        for i in range(numSensors):
-            if addressList:
-                bus[busnum].write_byte_data(addressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
+        for i in range(self.numSensors):
+            if self.addressList:
+                bus[self.busnum].write_byte_data(self.addressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
             
  
-    def select_data_config(self,busnum,addressList,numSensors):
+    def select_data_config(self):
         """Select the data configuration of the accelerometer from the given provided values"""
         DATA_CONFIG = (LIS3DHTR_ACCL_RANGE_2G | LIS3DHTR_BDU_CONT | LIS3DHTR_HR_DS)
-        for i in range(numSensors):
+        for i in range(self.numSensors):
             if addressList:
-                bus[busnum].write_byte_data(addressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
+                bus[self.busnum].write_byte_data(self.addressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
 
  
     def read_accl(self):
