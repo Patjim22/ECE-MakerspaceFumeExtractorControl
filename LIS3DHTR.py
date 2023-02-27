@@ -110,6 +110,7 @@ class LIS3DHTR():
         print(self.busnum,self.numSensors,self.addressList)
         for i in range(self.numSensors):
             if self.addressList:
+                print(self.addressList)
                 print("Data Read For: ",self.busnum, "Sensor: ",i)
                 data0 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_L)
                 data1 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_H)
