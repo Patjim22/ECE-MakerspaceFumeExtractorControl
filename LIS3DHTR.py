@@ -166,6 +166,7 @@ fanOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddr
 sensorOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
 for i in range(0,len(bus)):
     accl_old.append(lis3dhtr[i].read_accl())
+print(accl_old)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(23,GPIO.IN)
 GPIO.setup(18,GPIO.OUT)
