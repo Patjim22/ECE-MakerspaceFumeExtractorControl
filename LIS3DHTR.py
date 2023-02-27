@@ -79,7 +79,7 @@ LIS3DHTR_INT1_MOTION_DETECT         = 0x0A # 6-Direction Movement Recognition
  
 class LIS3DHTR():
     def __init__ (self,busnum,addressList,numSensors):
-        self.addressList = addressList
+        self.objaddressList = addressList
         self.numSensors = numSensors
         self.busnum = busnum
         self.select_datarate()
@@ -89,16 +89,16 @@ class LIS3DHTR():
         """Select the data rate of the accelerometer from the given provided values"""
         DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_10 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
         for i in range(self.numSensors):
-            if self.addressList:
-                bus[self.busnum].write_byte_data(self.addressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
+            if self.objaddressList:
+                bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
             
  
     def select_data_config(self):
         """Select the data configuration of the accelerometer from the given provided values"""
         DATA_CONFIG = (LIS3DHTR_ACCL_RANGE_2G | LIS3DHTR_BDU_CONT | LIS3DHTR_HR_DS)
         for i in range(self.numSensors):
-            if self.addressList:
-                bus[self.busnum].write_byte_data(self.addressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
+            if self.objaddressList:
+                bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
 
  
     def read_accl(self):
@@ -108,10 +108,10 @@ class LIS3DHTR():
         yAccl = 0
         zAccl = 0
         for i in range(self.numSensors):
-            if self.addressList:
+            if self.objaddressList:
                 print("Data Read For: ",self.busnum, "Sensor: ",i)
-                data0 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_L)
-                data1 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_X_H)
+                data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_X_L)
+                data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_X_H)
  
                 xAccl[i] = data1 * 256 + data0
                 if xAccl[i] > 32767 :
@@ -119,8 +119,8 @@ class LIS3DHTR():
                 xAccl[i] /= 16000
                 """Read data back from LIS3DHTR_REG_OUT_Y_L(0x2A), 2 bytes
                 Y-Axis Accl LSB, Y-Axis Accl MSB"""
-                data0 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_Y_L)
-                data1 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_Y_H)
+                data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Y_L)
+                data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Y_H)
  
                 yAccl[i] = data1 * 256 + data0
                 if yAccl[i] > 32767 :
@@ -128,8 +128,8 @@ class LIS3DHTR():
                 yAccl[i] /= 16000
                 """Read data back from LIS3DHTR_REG_OUT_Z_L(0x2C), 2 bytes
                 Z-Axis Accl LSB, Z-Axis Accl MSB"""
-                data0 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_Z_L)
-                data1 = bus[self.busnum].read_byte_data(self.addressList[i], LIS3DHTR_REG_OUT_Z_H)
+                data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Z_L)
+                data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Z_H)
  
                 zAccl[i] = data1 * 256 + data0
                 if zAccl[i] > 32767 :
@@ -154,10 +154,10 @@ for i in range(0,len(bus)):
     numAddresses.append(c)
     c = 0
     lis3dhtr.append(LIS3DHTR(i,addressList,numAddresses[i]))
-    print(lis3dhtr[0].addressList)
+    print(lis3dhtr[0].objaddressList)
     addressList.clear()
 
-print(lis3dhtr[0].addressList)
+print(lis3dhtr[0].objaddressList)
 time.sleep(1)
 accl_old = []
 count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
