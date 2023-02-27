@@ -209,17 +209,18 @@ while True:
                 lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
                 addressListtemp = []
         print(sensorOn)
-        if 1 in sensorOn:
-            print(sensorOn)
-            print("TURN FAN ON!")
-            for i in range(0,len(bus)):
-                for j  in range(numAddresses[i]):
-                    sensorOn[i][j] = 0
+        for i in range(0,len(bus)):
+            if 1 in  sensorOn[i]:
+                print("TURN FAN ON!")
+                for i in range(0,len(bus)):
+                    for j  in range(numAddresses[i]):
+                        sensorOn[i][j] = 0
                 GPIO.output(18,GPIO.HIGH)
                 time.sleep(25)
-        else:
-            print("Fan Turned Off")
-            GPIO.output(18,GPIO.LOW)
+                break
+            else:
+                print("Fan Turned Off")
+                GPIO.output(18,GPIO.LOW)
         
             
     time.sleep(2)
