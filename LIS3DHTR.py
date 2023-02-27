@@ -208,6 +208,7 @@ while True:
                 addressList.append(addressListtemp)
                 lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
                 addressListtemp = []
+        print(sensorOn)
         if 1 in sensorOn:
             print(sensorOn)
             print("TURN FAN ON!")
