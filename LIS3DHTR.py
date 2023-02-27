@@ -140,22 +140,24 @@ class LIS3DHTR():
 from LIS3DHTR import LIS3DHTR
 c = 0
 addressList = []
+addressListtemp = []
 numAddresses = []
 lis3dhtr = []
 for i in range(0,len(bus)):
     for j in range(2,120):
         try:
             bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
-            addressList.append(j)
+            addressListtemp.append(j)
             c = c + 1
             print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
         except:
             pass
     numAddresses.append(c)
     c = 0
-    lis3dhtr.append(LIS3DHTR(i,addressList,numAddresses[i]))
+    addressList.append(addressListtemp)
+    lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
     print(lis3dhtr[0].objaddressList)
-    addressList.clear()
+    addressListtemp.clear()
     print(lis3dhtr[0].objaddressList)
     
 for i in range(0,len(bus)):
