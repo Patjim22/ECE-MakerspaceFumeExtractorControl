@@ -97,7 +97,7 @@ class LIS3DHTR():
         """Select the data configuration of the accelerometer from the given provided values"""
         DATA_CONFIG = (LIS3DHTR_ACCL_RANGE_2G | LIS3DHTR_BDU_CONT | LIS3DHTR_HR_DS)
         for i in range(self.numSensors):
-            if addressList:
+            if self.addressList:
                 bus[self.busnum].write_byte_data(self.addressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
 
  
@@ -149,15 +149,15 @@ for i in range(0,len(bus)):
             addressList.append(j)
             c = c + 1
             print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
-            print(addressList)
         except:
             pass
     numAddresses.append(c)
     c = 0
     lis3dhtr.append(LIS3DHTR(i,addressList,numAddresses[i]))
+    print(lis3dhtr[i].addressList)
     addressList.clear()
 
-print("why is this not working",lis3dhtr[0].busnum)
+
 time.sleep(1)
 accl_old = []
 count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
@@ -166,7 +166,6 @@ fanOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddr
 sensorOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
 for i in range(0,len(bus)):
     accl_old.append(lis3dhtr[i].read_accl())
-    print(accl_old)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(23,GPIO.IN)
 GPIO.setup(18,GPIO.OUT)
