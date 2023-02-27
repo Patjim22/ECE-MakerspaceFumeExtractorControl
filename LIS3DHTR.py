@@ -135,7 +135,6 @@ class LIS3DHTR():
                 if zAccl[i] > 32767 :
                     zAccl[i] -= 65536
                 zAccl[i] /= 16000
-            print(xAccl,yAccl,zAccl)
             return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
  
 from LIS3DHTR import LIS3DHTR
@@ -157,7 +156,8 @@ for i in range(0,len(bus)):
     c = 0
     lis3dhtr.append(LIS3DHTR(i,addressList,numAddresses[i]))
     addressList.clear()
-print(lis3dhtr[0].addressList)
+
+print("why is this not working",lis3dhtr[0].addressList)
 time.sleep(1)
 accl_old = []
 count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
