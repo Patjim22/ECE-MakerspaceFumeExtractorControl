@@ -221,7 +221,20 @@ while True:
             else:
                 print("Fan Turned Off")
                 GPIO.output(18,GPIO.LOW)
-        
+        if accl_old == None:
+            for j in range(2,120):
+                try:
+                    bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
+                    addressListtemp.append(j)
+                    c = c + 1
+                    print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
+                except:
+                    pass
+                numAddresses[i] = c
+                c = 0
+                addressList[i] = addressListtemp
+                lis3dhtr[i] = LIS3DHTR(i,addressList[i],numAddresses[i])
+                addressListtemp = []
             
     time.sleep(2)
 
