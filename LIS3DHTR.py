@@ -221,7 +221,7 @@ while True:
             else:
                 print("Fan Turned Off")
                 GPIO.output(18,GPIO.LOW)
-        if accl_old == None:
+        if accl_old[i] == None:
             for j in range(2,120):
                 try:
                     bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
