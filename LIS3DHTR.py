@@ -203,10 +203,10 @@ while True:
                     print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
                 except:
                     pass
-                numAddresses.append(c)
+                numAddresses[i] = c
                 c = 0
-                addressList.append(addressListtemp)
-                lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
+                addressList[i] = addressListtemp
+                lis3dhtr[i] = LIS3DHTR(i,addressList[i],numAddresses[i])
                 addressListtemp = []
         print(sensorOn)
         for i in range(0,len(bus)):
