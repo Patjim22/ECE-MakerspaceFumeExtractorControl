@@ -138,6 +138,22 @@ class LIS3DHTR():
             return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
  
 from LIS3DHTR import LIS3DHTR
+
+def SensorReinitalization(i):
+        for j in range(2,120):
+                try:
+                    bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
+                    addressListtemp.append(j)
+                    c = c + 1
+                    print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
+                except:
+                    pass
+                numAddresses[i] = c
+                c = 0
+                addressList[i] = addressListtemp
+                addressListtemp = []                
+        return LIS3DHTR(i,addressList[i],numAddresses[i])
+
 c = 0
 addressList = []
 addressListtemp = []
@@ -168,7 +184,6 @@ for i in range(0,len(bus)):
     accl_old.append(lis3dhtr[i].read_accl())
 print(accl_old)
 GPIO.setmode(GPIO.BCM)
-GPIO.setup(23,GPIO.IN)
 GPIO.setup(18,GPIO.OUT)
 GPIO.output(18,GPIO.LOW)
 while True:
@@ -190,24 +205,10 @@ while True:
                         sensorOn[i][j] = 0
                         lowcount[i][j] = 0
                 print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j],sensorOn[i][j])
-                accl_old[i] = accl
-                
-                
+                accl_old[i] = accl                
         except:
             print("Exception Happened")
-            for j in range(2,120):
-                try:
-                    bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
-                    addressListtemp.append(j)
-                    c = c + 1
-                    print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
-                except:
-                    pass
-                numAddresses[i] = c
-                c = 0
-                addressList[i] = addressListtemp
-                lis3dhtr[i] = LIS3DHTR(i,addressList[i],numAddresses[i])
-                addressListtemp = []
+            lis3dhtr[i] = SensorReinitalization(i)       
         print(sensorOn)
         for i in range(0,len(bus)):
             if 1 in  sensorOn[i]:
@@ -221,6 +222,9 @@ while True:
             else:
                 print("Fan Turned Off")
                 GPIO.output(18,GPIO.LOW)
+        #This check is here to see if a new sensor was connected/reconnected **needs testing
+        if accl == None:
+            lis3dhtr[i] = SensorReinitalization(i)
             
     time.sleep(2)
 
