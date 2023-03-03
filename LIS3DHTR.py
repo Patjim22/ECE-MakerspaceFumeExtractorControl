@@ -211,12 +211,14 @@ while True:
             lis3dhtr[i] = SensorReinitalization(i)       
         print(sensorOn)
         print(sensorOn[i])
-        for i in range(0,len(bus)):
-            if 1 in  sensorOn[i]:
-                print("TURN FAN ON!")
-                GPIO.output(18,GPIO.HIGH)
-                time.sleep(25)
-                break
+        if 1 in  sensorOn[i]:
+            print("TURN FAN ON!")
+            GPIO.output(18,GPIO.HIGH)
+            time.sleep(25)
+            break
+        else:
+            if 1 in (item for sublist in sensorOn for item in sublist):
+                print("Fan Kept On")
             else:
                 print("Fan Turned Off")
                 GPIO.output(18,GPIO.LOW)
