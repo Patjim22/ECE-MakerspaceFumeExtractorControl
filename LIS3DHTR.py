@@ -140,6 +140,7 @@ class LIS3DHTR():
 from LIS3DHTR import LIS3DHTR
 
 def SensorReinitalization(i):
+        c = 0
         for j in range(2,120):
                 try:
                     bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
@@ -149,7 +150,6 @@ def SensorReinitalization(i):
                 except:
                     pass
                 numAddresses[i] = c
-                c = 0
                 addressList[i] = addressListtemp
                 addressListtemp = []                
         return LIS3DHTR(i,addressList[i],numAddresses[i])
