@@ -151,7 +151,8 @@ def SensorReinitalization(i):
                 except:
                     pass
                 numAddresses[i] = c
-                addressList[i] = addressListtemp                
+                addressList[i] = addressListtemp
+                print(numAddresses[i],addressList[i])                
         return LIS3DHTR(i,addressList[i],numAddresses[i])
 
 c = 0
@@ -214,7 +215,7 @@ while True:
         if 1 in  sensorOn[i]:
             print("TURN FAN ON!")
             GPIO.output(18,GPIO.HIGH)
-            time.sleep(25)
+            time.sleep(10)
             break
         else:
             if 1 in (item for sublist in sensorOn for item in sublist):
