@@ -152,7 +152,8 @@ def SensorReinitalization(i):
                     pass
                 numAddresses[i] = c
                 addressList[i] = addressListtemp
-                print(numAddresses[i],addressList[i])                
+        if i == 0:
+            print(numAddresses[i],addressList[i])                        
         return LIS3DHTR(i,addressList[i],numAddresses[i])
 
 c = 0
