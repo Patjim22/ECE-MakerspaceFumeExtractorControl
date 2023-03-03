@@ -210,6 +210,7 @@ while True:
             print("Exception Happened")
             lis3dhtr[i] = SensorReinitalization(i)       
         print(sensorOn)
+        print(sensorOn[i])
         for i in range(0,len(bus)):
             if 1 in  sensorOn[i]:
                 print("TURN FAN ON!")
