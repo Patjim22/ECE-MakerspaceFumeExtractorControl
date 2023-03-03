@@ -217,7 +217,6 @@ while True:
             print("TURN FAN ON!")
             GPIO.output(18,GPIO.HIGH)
             time.sleep(10)
-            break
         else:
             if 1 in (item for sublist in sensorOn for item in sublist):
                 print("Fan Kept On")
