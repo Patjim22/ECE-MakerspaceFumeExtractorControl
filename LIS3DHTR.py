@@ -224,6 +224,7 @@ while True:
                 GPIO.output(18,GPIO.LOW)
         #This check is here to see if a new sensor was connected/reconnected **needs testing
         if accl == None:
+            print("Checking", i)
             lis3dhtr[i] = SensorReinitalization(i)
             
     time.sleep(2)
