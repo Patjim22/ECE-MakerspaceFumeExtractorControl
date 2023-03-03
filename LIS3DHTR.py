@@ -213,9 +213,6 @@ while True:
         for i in range(0,len(bus)):
             if 1 in  sensorOn[i]:
                 print("TURN FAN ON!")
-                for i in range(0,len(bus)):
-                    for j  in range(numAddresses[i]):
-                        sensorOn[i][j] = 0
                 GPIO.output(18,GPIO.HIGH)
                 time.sleep(25)
                 break
