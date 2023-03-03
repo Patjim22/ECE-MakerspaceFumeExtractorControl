@@ -210,7 +210,8 @@ while True:
                 accl_old[i] = accl                
         except:
             print("Exception Happened")
-            lis3dhtr[i] = SensorReinitalization(i)       
+            lis3dhtr[i] = SensorReinitalization(i)
+            sensorOn[i] = []*lis3dhtr[i].numSensors       
         print(sensorOn)
         print(sensorOn[i])
         if 1 in  sensorOn[i]:
