@@ -210,6 +210,7 @@ while True:
                 accl_old[i] = accl                
         except:
             print("Exception Happened")
+            print(accl)
             lis3dhtr[i] = SensorReinitalization(i)
             sensorOn[i] = [0]*lis3dhtr[i].numSensors       
         print(sensorOn)
@@ -228,6 +229,8 @@ while True:
         if accl == None:
             print("Checking", i)
             lis3dhtr[i] = SensorReinitalization(i)
+            if lis3dhtr[i].busnum > 0:
+                time.sleep(1)
             
     time.sleep(2)
 
