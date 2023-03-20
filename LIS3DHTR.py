@@ -228,9 +228,9 @@ while True:
         #This check is here to see if a new sensor was connected/reconnected **needs testing
         if accl == None:
             print("Checking", i)
-            lis3dhtr[i] = SensorReinitalization(i)
-            if lis3dhtr[i].busnum > 0:
+            if accl_old[i]:
                 time.sleep(1)
+            lis3dhtr[i] = SensorReinitalization(i)
             
     time.sleep(2)
 
