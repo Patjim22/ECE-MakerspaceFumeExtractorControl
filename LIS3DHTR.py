@@ -182,6 +182,7 @@ count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddr
 lowcount = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
 fanOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
 sensorOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+time_before_next_loop = 2
 for i in range(0,len(bus)):
     accl_old.append(lis3dhtr[i].read_accl())
 print(accl_old)
@@ -220,18 +221,20 @@ while True:
         if 1 in  sensorOn[i]:
             print("TURN FAN ON!")
             GPIO.output(18,GPIO.HIGH)
+            time_before_next_loop = 10
         else:
             if 1 in (item for sublist in sensorOn for item in sublist):
                 print("Fan Kept On")
             else:
                 print("Fan Turned Off")
                 GPIO.output(18,GPIO.LOW)
+                time_before_next_loop = 2
         #This check is here to see if a new sensor was connected/reconnected **needs testing
         if accl == None:
             print("Checking", i)
             if accl_old[i]:
                 time.sleep(1)
             lis3dhtr[i] = SensorReinitalization(i)
-        time.sleep(2)  
-    time.sleep(2)
+        time.sleep(1)  
+    time.sleep(time_before_next_loop)
 
