@@ -211,7 +211,9 @@ while True:
         except:
             print("Exception Happened")
             print(accl)
+            time.sleep(1)
             lis3dhtr[i] = SensorReinitalization(i)
+            time.sleep(1)
             sensorOn[i] = [0]*lis3dhtr[i].numSensors       
         print(sensorOn)
         print(sensorOn[i])
