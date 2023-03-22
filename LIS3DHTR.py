@@ -228,6 +228,7 @@ while True:
             else:
                 print("Fan Turned Off")
                 GPIO.output(18,GPIO.LOW)
+                print(time_before_next_loop)
                 time_before_next_loop = .5
         #This check is here to see if a new sensor was connected/reconnected **needs testing
         if accl == None:
@@ -235,6 +236,7 @@ while True:
             if accl_old[i]:
                 time.sleep(1)
             lis3dhtr[i] = SensorReinitalization(i)
-        time.sleep(.3)  
+        time.sleep(.3)
+    print(time_before_next_loop)  
     time.sleep(time_before_next_loop)
 
