@@ -221,7 +221,7 @@ while True:
         if 1 in  sensorOn[i]:
             print("TURN FAN ON!")
             GPIO.output(18,GPIO.HIGH)
-            time_before_next_loop = 10
+            time_before_next_loop = 5
         else:
             if 1 in (item for sublist in sensorOn for item in sublist):
                 print("Fan Kept On")
@@ -235,6 +235,6 @@ while True:
             if accl_old[i]:
                 time.sleep(1)
             lis3dhtr[i] = SensorReinitalization(i)
-        time.sleep(1)  
+        time.sleep(.1)  
     time.sleep(time_before_next_loop)
 
