@@ -236,6 +236,8 @@ while True:
             if accl_old[i]:
                 time.sleep(1)
             lis3dhtr[i] = SensorReinitalization(i)
+            if lis3dhtr[i].numSensors >= 1:
+                time.sleep(1)
         time.sleep(.3)
     print(time_before_next_loop)  
     time.sleep(time_before_next_loop)
