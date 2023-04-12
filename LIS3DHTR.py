@@ -87,7 +87,7 @@ class LIS3DHTR():
  
     def select_datarate(self):
         """Select the data rate of the accelerometer from the given provided values"""
-        DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_10 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
+        DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_1 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
         for i in range(self.numSensors):
             if self.objaddressList:
                 bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
@@ -241,7 +241,7 @@ while True:
                 time.sleep(1)
                 reinit_count[i] += 1
                 print("Sensor Reinitalized",reinit_count)
-        time.sleep(.3)
+        time.sleep(1)
     print(time_before_next_loop)  
     time.sleep(time_before_next_loop)
 
