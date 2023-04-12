@@ -88,18 +88,26 @@ class LIS3DHTR():
     def select_datarate(self):
         """Select the data rate of the accelerometer from the given provided values"""
         DATARATE_CONFIG = (LIS3DHTR_ACCL_DR_1 | LIS3DHTR_ACCL_XAXIS | LIS3DHTR_ACCL_YAXIS | LIS3DHTR_ACCL_ZAXIS)
-        for i in range(self.numSensors):
-            if self.objaddressList:
-                bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
-            
+        try:
+            for i in range(self.numSensors):
+                if self.objaddressList:
+                    bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
+        except:
+            print("Initalization Failed")
+            self.numSensors = 0
+            self.objaddressList = []    
  
     def select_data_config(self):
         """Select the data configuration of the accelerometer from the given provided values"""
         DATA_CONFIG = (LIS3DHTR_ACCL_RANGE_2G | LIS3DHTR_BDU_CONT | LIS3DHTR_HR_DS)
-        for i in range(self.numSensors):
-            if self.objaddressList:
-                bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
-
+        try:
+            for i in range(self.numSensors):
+                if self.objaddressList:
+                    bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
+        except:
+            print("Initalization Failed")
+            self.numSensors = 0
+            self.objaddressList = []
  
     def read_accl(self):
         """Read data back from LIS3DHTR_REG_OUT_X_L(0x28), 2 bytes
