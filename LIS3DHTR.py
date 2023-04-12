@@ -161,6 +161,7 @@ addressList = []
 addressListtemp = []
 numAddresses = []
 lis3dhtr = []
+reinit_count = [0]*8
 for i in range(0,len(bus)):
     for j in range(2,120):
         try:
@@ -238,6 +239,8 @@ while True:
             lis3dhtr[i] = SensorReinitalization(i)
             if lis3dhtr[i].numSensors >= 1:
                 time.sleep(1)
+                reinit_count[i] += 1
+                print("Sensor Reinitalized",reinit_count)
         time.sleep(.3)
     print(time_before_next_loop)  
     time.sleep(time_before_next_loop)
