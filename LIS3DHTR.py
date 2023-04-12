@@ -94,6 +94,7 @@ class LIS3DHTR():
                     bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
         except:
             print("Initalization Failed")
+            log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor Failed to Initalize Despite Finding One"))
             self.numSensors = 0
             self.objaddressList = []    
  
@@ -106,6 +107,7 @@ class LIS3DHTR():
                     bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
         except:
             print("Initalization Failed")
+            log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor Failed to Initalize Despite Finding One"))
             self.numSensors = 0
             self.objaddressList = []
  
@@ -163,93 +165,96 @@ def SensorReinitalization(i):
         if i == 0:
             print(numAddresses[i],addressList[i])                        
         return LIS3DHTR(i,addressList[i],numAddresses[i])
-
-c = 0
-addressList = []
-addressListtemp = []
-numAddresses = []
-lis3dhtr = []
-reinit_count = [0]*8
-for i in range(0,len(bus)):
-    for j in range(2,120):
-        try:
-            bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
-            addressListtemp.append(j)
-            c = c + 1
-            print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
-        except:
-            pass
-    numAddresses.append(c)
+    
+with open("/home/Makerspace/ECE-Makerspace-Accelerometer/error_log.csv", "a") as log:
     c = 0
-    addressList.append(addressListtemp)
-    lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
+    addressList = []
     addressListtemp = []
+    numAddresses = []
+    lis3dhtr = []
+    reinit_count = [0]*8
 
-time.sleep(1)
-accl_old = []
-count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
-lowcount = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
-fanOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
-sensorOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
-time_before_next_loop = .5
-for i in range(0,len(bus)):
-    accl_old.append(lis3dhtr[i].read_accl())
-print(accl_old)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(18,GPIO.OUT)
-GPIO.output(18,GPIO.LOW)
-while True:
     for i in range(0,len(bus)):
-        try:
-            accl = lis3dhtr[i].read_accl()
-            print(accl,i)
-            for j in range(numAddresses[i]):
-                if abs(accl_old[i]['x'][j] - accl['x'][j]) > .15 or abs(accl_old[i]['y'][j] - accl['y'][j]) > .15 or abs(accl_old[i]['z'][j] - accl['z'][j]) > .15:
-                    count[i][j] += 1
-                    lowcount[i][j] = 0
-                    if count[i][j] > 2:
-                        sensorOn[i][j] = 1
-                        count[i][j] = 0
-                else:
-                    count[i][j] = 0
-                    lowcount[i][j] += 1
-                    if lowcount[i][j] > 4:
-                        sensorOn[i][j] = 0
+        for j in range(2,120):
+            try:
+                bus[i].read_byte_data(j,LIS3DHTR_REG_OUT_X_L)
+                addressListtemp.append(j)
+                c = c + 1
+                print("Sensor Found \n Bus:",i,"\n Address: ",hex(j))
+            except:
+                pass
+        numAddresses.append(c)
+        c = 0
+        addressList.append(addressListtemp)
+        lis3dhtr.append(LIS3DHTR(i,addressList[i],numAddresses[i]))
+        addressListtemp = []
+
+    time.sleep(1)
+    accl_old = []
+    count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+    lowcount = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+    fanOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+    sensorOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
+    time_before_next_loop = .5
+    for i in range(0,len(bus)):
+        accl_old.append(lis3dhtr[i].read_accl())
+    print(accl_old)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(18,GPIO.OUT)
+    GPIO.output(18,GPIO.LOW)
+    while True:
+        for i in range(0,len(bus)):
+            try:
+                accl = lis3dhtr[i].read_accl()
+                print(accl,i)
+                for j in range(numAddresses[i]):
+                    if abs(accl_old[i]['x'][j] - accl['x'][j]) > .15 or abs(accl_old[i]['y'][j] - accl['y'][j]) > .15 or abs(accl_old[i]['z'][j] - accl['z'][j]) > .15:
+                        count[i][j] += 1
                         lowcount[i][j] = 0
-                print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j],sensorOn[i][j])
-                accl_old[i] = accl                
-        except:
-            print("Exception Happened")
-            print(accl)
-            time.sleep(1)
-            lis3dhtr[i] = SensorReinitalization(i)
-            time.sleep(1)
-            sensorOn[i] = [0]*lis3dhtr[i].numSensors       
-        print(sensorOn)
-        print(sensorOn[i])
-        if 1 in  sensorOn[i]:
-            print("TURN FAN ON!")
-            GPIO.output(18,GPIO.HIGH)
-            time_before_next_loop = 5
-        else:
-            if 1 in (item for sublist in sensorOn for item in sublist):
-                print("Fan Kept On")
+                        if count[i][j] > 2:
+                            sensorOn[i][j] = 1
+                            count[i][j] = 0
+                    else:
+                        count[i][j] = 0
+                        lowcount[i][j] += 1
+                        if lowcount[i][j] > 4:
+                            sensorOn[i][j] = 0
+                            lowcount[i][j] = 0
+                    print(i,"Sensor: ",j,"Accels X: ",abs(accl_old[i]['x'][j] - accl['x'][j]), count[i][j],sensorOn[i][j])
+                    accl_old[i] = accl                
+            except:
+                log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor"+str(i)+"Failed"))
+                print("Exception Happened")
+                print(accl)
+                time.sleep(1)
+                lis3dhtr[i] = SensorReinitalization(i)
+                time.sleep(1)
+                sensorOn[i] = [0]*lis3dhtr[i].numSensors       
+            print(sensorOn)
+            print(sensorOn[i])
+            if 1 in  sensorOn[i]:
+                print("TURN FAN ON!")
+                GPIO.output(18,GPIO.HIGH)
+                time_before_next_loop = 5
             else:
-                print("Fan Turned Off")
-                GPIO.output(18,GPIO.LOW)
-                print(time_before_next_loop)
-                time_before_next_loop = .5
-        #This check is here to see if a new sensor was connected/reconnected **needs testing
-        if accl == None:
-            print("Checking", i)
-            if accl_old[i]:
-                time.sleep(1)
-            lis3dhtr[i] = SensorReinitalization(i)
-            if lis3dhtr[i].numSensors >= 1:
-                time.sleep(1)
-                reinit_count[i] += 1
-                print("Sensor Reinitalized",reinit_count)
-        time.sleep(1)
-    print(time_before_next_loop)  
-    time.sleep(time_before_next_loop)
+                if 1 in (item for sublist in sensorOn for item in sublist):
+                    print("Fan Kept On")
+                else:
+                    print("Fan Turned Off")
+                    GPIO.output(18,GPIO.LOW)
+                    print(time_before_next_loop)
+                    time_before_next_loop = .5
+            #This check is here to see if a new sensor was connected/reconnected **needs testing
+            if accl == None:
+                print("Checking", i)
+                if accl_old[i]:
+                    time.sleep(1)
+                lis3dhtr[i] = SensorReinitalization(i)
+                if lis3dhtr[i].numSensors >= 1:
+                    time.sleep(1)
+                    reinit_count[i] += 1
+                    print("Sensor Reinitalized",reinit_count)
+            time.sleep(1)
+        print(time_before_next_loop)  
+        time.sleep(time_before_next_loop)
 
