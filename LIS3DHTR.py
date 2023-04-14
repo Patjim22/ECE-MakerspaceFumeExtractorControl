@@ -10,9 +10,11 @@ import smbus
 import time
 import RPi.GPIO as GPIO
  
-# Get I2C bus
+# Get I2C bus these parameters should be specified by the pihat best way to find them is by using i2cdetect -l in terminal
 buslist = [11,12,13,14,15,16,17,18]
 bus = [smbus.SMBus(buslist[0]),smbus.SMBus(buslist[1]),smbus.SMBus(buslist[2]),smbus.SMBus(buslist[3]),smbus.SMBus(buslist[4]),smbus.SMBus(buslist[5]),smbus.SMBus(buslist[6]),smbus.SMBus(buslist[7])]
+
+#This is basic config macros you can mostly ignore these or check the datasheet if you want to operate in other modes
 
 # I2C address of the device
 LIS3DHTR_DEFAULT_ADDRESS            = 0x19
@@ -76,7 +78,14 @@ LIS3DHTR_INT1_DURATION              = 0x33 # Interrupt 1 Duration register
 LIS3DHTR_INT1_MOTION_DETECT         = 0x0A # 6-Direction Movement Recognition
 
  
- 
+#LIS3DHTR Object
+#most of the params are default, however some modification had to be made to allow for concurrent running with the i2cmux
+#most of this was the addition of the input params like busnum, addressList and numSensors
+#these allow for you to reference parts of the objects when reading the data
+#there is also a try and except block on the datarate and config this prevents the error where a sensor disconnects 
+#it also logs these instances, however the system should be robust enough to keep running.
+#potentially could cause an issue when log file fills up, simple enough to remove however
+
 class LIS3DHTR():
     def __init__ (self,busnum,addressList,numSensors):
         self.objaddressList = addressList
@@ -94,7 +103,7 @@ class LIS3DHTR():
                     bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL1, DATARATE_CONFIG)
         except:
             print("Initalization Failed")
-            log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor Failed to Initalize Despite Finding One"))
+            log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor Failed to Initalize Despite Finding One")) #remove this line if log file fills up
             self.numSensors = 0
             self.objaddressList = []    
  
@@ -107,7 +116,7 @@ class LIS3DHTR():
                     bus[self.busnum].write_byte_data(self.objaddressList[i], LIS3DHTR_REG_CTRL4, DATA_CONFIG)
         except:
             print("Initalization Failed")
-            log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor Failed to Initalize Despite Finding One"))
+            log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor Failed to Initalize Despite Finding One")) #remove this line if log file fills up
             self.numSensors = 0
             self.objaddressList = []
  
@@ -148,7 +157,8 @@ class LIS3DHTR():
             return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
  
 from LIS3DHTR import LIS3DHTR
-
+#reinit function
+#zeros the sensor and checks the i2c if it finds a sensor, it keeps it
 def SensorReinitalization(i):
         c = 0
         addressListtemp = []
@@ -166,14 +176,15 @@ def SensorReinitalization(i):
             print(numAddresses[i],addressList[i])                        
         return LIS3DHTR(i,addressList[i],numAddresses[i])
     
-with open("/home/Makerspace/ECE-Makerspace-Accelerometer/error_log.csv", "a") as log:
+with open("/home/Makerspace/ECE-Makerspace-Accelerometer/error_log.csv", "a") as log: #remove this line if log file fills up
+    #initalization of data storage structures for enabling the LIS3DHTR
     c = 0
     addressList = []
     addressListtemp = []
     numAddresses = []
     lis3dhtr = []
     reinit_count = [0]*8
-
+    #first intitalization loop basically runs through all the i2c ports on the pi and checks if it got a read for one if so it found a sensor
     for i in range(0,len(bus)):
         for j in range(2,120):
             try:
@@ -190,18 +201,27 @@ with open("/home/Makerspace/ECE-Makerspace-Accelerometer/error_log.csv", "a") as
         addressListtemp = []
 
     time.sleep(1)
+    #setting up tracking variables
     accl_old = []
     count = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
     lowcount = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
     fanOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
     sensorOn = [[0]*numAddresses[0],[0]*numAddresses[1],[0]*numAddresses[2],[0]*numAddresses[3],[0]*numAddresses[4],[0]*numAddresses[5],[0]*numAddresses[6],[0]*numAddresses[7]]
     time_before_next_loop = .5
+    #getting old values, so we have something to compare against on the first run
     for i in range(0,len(bus)):
         accl_old.append(lis3dhtr[i].read_accl())
     print(accl_old)
+    #configuring the output pin
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(18,GPIO.OUT)
     GPIO.output(18,GPIO.LOW)
+    #the operation loop 
+    #try except block allows for robustness as if a sensor disconnects it won't throw an error and stop code
+    #instead it will deinit the sensor
+    #basic operation is that the sensor will read a new value, compare it to the old and if the difference is greater than the threshold
+    #it will add a count to the fan, if the fan gets more counts than its threshold it will turn on
+    #while it is on the loop will be less frequent until the fan turns off
     while True:
         for i in range(0,len(bus)):
             try:
@@ -236,6 +256,8 @@ with open("/home/Makerspace/ECE-Makerspace-Accelerometer/error_log.csv", "a") as
                 GPIO.output(18,GPIO.HIGH)
                 time_before_next_loop = 5
             else:
+                #poor wording on this if but basically checks every single part of the sensorOn list for a 1
+                #if theres is no 1 it will turn off
                 if 1 in (item for sublist in sensorOn for item in sublist):
                     print("Fan Kept On")
                 else:
@@ -243,7 +265,7 @@ with open("/home/Makerspace/ECE-Makerspace-Accelerometer/error_log.csv", "a") as
                     GPIO.output(18,GPIO.LOW)
                     print(time_before_next_loop)
                     time_before_next_loop = .5
-            #This check is here to see if a new sensor was connected/reconnected **needs testing
+            #This check is here to see if a new sensor was connected/reconnected
             if accl == None:
                 print("Checking", i)
                 if accl_old[i]:
