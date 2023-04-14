@@ -226,7 +226,6 @@ with open("/home/Makerspace/ECE-Makerspace-Accelerometer/error_log.csv", "a") as
                 log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),"Sensor"+str(i)+"Failed"))
                 print("Exception Happened")
                 print(accl)
-                time.sleep(1)
                 lis3dhtr[i] = SensorReinitalization(i)
                 time.sleep(1)
                 sensorOn[i] = [0]*lis3dhtr[i].numSensors       
