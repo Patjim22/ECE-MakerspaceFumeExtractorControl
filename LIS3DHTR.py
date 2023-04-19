@@ -128,32 +128,37 @@ class LIS3DHTR():
         zAccl = [0]*self.numSensors
         for i in range(self.numSensors):
             if self.objaddressList:
-                print("Data Read For: ",self.busnum, "Sensor: ",i)
-                data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_X_L)
-                data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_X_H)
- 
-                xAccl[i] = data1 * 256 + data0
-                if xAccl[i] > 32767 :
-                    xAccl[i] -= 65536
-                xAccl[i] /= 16000
-                """Read data back from LIS3DHTR_REG_OUT_Y_L(0x2A), 2 bytes
-                Y-Axis Accl LSB, Y-Axis Accl MSB"""
-                data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Y_L)
-                data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Y_H)
- 
-                yAccl[i] = data1 * 256 + data0
-                if yAccl[i] > 32767 :
-                    yAccl[i] -= 65536
-                yAccl[i] /= 16000
-                """Read data back from LIS3DHTR_REG_OUT_Z_L(0x2C), 2 bytes
-                Z-Axis Accl LSB, Z-Axis Accl MSB"""
-                data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Z_L)
-                data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Z_H)
- 
-                zAccl[i] = data1 * 256 + data0
-                if zAccl[i] > 32767 :
-                    zAccl[i] -= 65536
-                zAccl[i] /= 16000
+                try:
+                    print("Data Read For: ",self.busnum, "Sensor: ",i)
+                    data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_X_L)
+                    data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_X_H)
+    
+                    xAccl[i] = data1 * 256 + data0
+                    if xAccl[i] > 32767 :
+                        xAccl[i] -= 65536
+                    xAccl[i] /= 16000
+                    """Read data back from LIS3DHTR_REG_OUT_Y_L(0x2A), 2 bytes
+                    Y-Axis Accl LSB, Y-Axis Accl MSB"""
+                    data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Y_L)
+                    data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Y_H)
+    
+                    yAccl[i] = data1 * 256 + data0
+                    if yAccl[i] > 32767 :
+                        yAccl[i] -= 65536
+                    yAccl[i] /= 16000
+                    """Read data back from LIS3DHTR_REG_OUT_Z_L(0x2C), 2 bytes
+                    Z-Axis Accl LSB, Z-Axis Accl MSB"""
+                    data0 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Z_L)
+                    data1 = bus[self.busnum].read_byte_data(self.objaddressList[i], LIS3DHTR_REG_OUT_Z_H)
+    
+                    zAccl[i] = data1 * 256 + data0
+                    if zAccl[i] > 32767 :
+                        zAccl[i] -= 65536
+                    zAccl[i] /= 16000
+                except:
+                    xAccl[i] = None
+                    yAccl[i] = None
+                    zAccl[i] = None
             return {'x' : xAccl, 'y' : yAccl, 'z' : zAccl}
  
 from LIS3DHTR import LIS3DHTR
